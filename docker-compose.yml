@@ -1,0 +1,32 @@
+version: '3'
+services:
+  user_service:
+    build: ./user_service
+    ports:
+      - "3001:3001"
+    environment:
+      - DATABASE_URL=postgres://user:password@db:5432/usersdb
+
+  booking_service:
+    build: ./booking_service
+    ports:
+      - "3002:3002"
+    environment:
+      - DATABASE_URL=postgres://user:password@db:5432/bookingsdb
+
+  worker_service:
+    build: ./worker_service
+    ports:
+      - "3003:3003"
+    environment:
+      - DATABASE_URL=postgres://user:password@db:5432/workersdb
+
+  # PostgreSQL Database Service for all services
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: usersdb
+    ports:
+      - "5432:5432"
