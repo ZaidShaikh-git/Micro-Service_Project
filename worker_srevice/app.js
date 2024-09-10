@@ -25,4 +25,4 @@ app.get('/workers', async (req, res) => {
 });
 
 // Start server
-app.listen(3004, () => console.log('Worker management service running on port 3004'));
+app.listen(3003, () => console.log('Worker management service running on port 3003'));

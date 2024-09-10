@@ -26,4 +26,4 @@ app.get('/bookings/:userId', async (req, res) => {
 });
 
 // Start server
-app.listen(3003, () => console.log('Booking service running on port 3003'));
+app.listen(3002, () => console.log('Booking service running on port 3002'));
