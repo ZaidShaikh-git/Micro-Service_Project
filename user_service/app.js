@@ -7,6 +7,10 @@ const { Pool } = require('pg');
 const app = express();
 app.use(express.json());
 
+app.get("/" ,(req,res) => {
+  res.send("<h1>This is user service Container runnuing</h1>")
+})
+
 // PostgreSQL setup
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
