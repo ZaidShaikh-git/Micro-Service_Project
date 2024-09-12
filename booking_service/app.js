@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json());
 
 app.get("/" ,(req,res) => {
-  res.send("<h1>This is booking service Container runnuing</h1>")
+  res.send("<h1>This is booking service Container running</h1>")
 })
 
 // PostgreSQL setup

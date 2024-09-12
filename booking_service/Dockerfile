@@ -9,7 +9,7 @@ COPY package*.json ./
 
 # Install dependencies
 RUN npm install
-
+ 
 # Copy the rest of the application code
 COPY . .
 
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3002
 
 # Define the command to run the app
-CMD ["npm", "start"]
+CMD ["npm", "run","dev"]
