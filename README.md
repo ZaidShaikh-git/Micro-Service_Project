@@ -1,3 +1,5 @@
 # Micro-Service_Project
 <br>
-WOOP WOOP
+This is a microservice based project for on-demand service of local workers.
+
+
