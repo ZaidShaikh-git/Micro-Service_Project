@@ -1,33 +1,26 @@
 // Booking Service: app.js
 const express = require('express');
-const { Pool } = require('pg');
+const bookingRoutes = require('./routes/bookingRoutes');
+const cors = require('cors'); // Import CORS
 
 const app = express();
-app.use(express.json());
+app.use(cors({
+  origin: 'http://localhost:5173', // Replace with your frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
+  credentials: true // If you need to allow credentials (cookies, authorization headers)
+}));
+// Middleware
+app.use(express.json()); // Parse JSON bodies
+
+// Use booking routes
+app.use('/bookings', bookingRoutes);
+
+// Start the server
+const PORT = process.env.PORT || 3002;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
 
 app.get("/" ,(req,res) => {
   res.send("<h1>This is booking service Container running</h1>")
 })
-
-// PostgreSQL setup
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-
-// Create a booking
-app.post('/bookings', async (req, res) => {
-  const { serviceId, userId, bookingDate, address } = req.body;
-  const result = await pool.query(
-    'INSERT INTO bookings (service_id, user_id, booking_date, address) VALUES ($1, $2, $3, $4) RETURNING *',
-    [serviceId, userId, bookingDate, address]
-  );
-  res.json(result.rows[0]);
-});
-
-// Fetch bookings for a user
-app.get('/bookings/:userId', async (req, res) => {
-  const { userId } = req.params;
-  const result = await pool.query('SELECT * FROM bookings WHERE user_id = $1', [userId]);
-  res.json(result.rows);
-});
-
-// Start server
-app.listen(3002, () => console.log('Booking service running on port 3002'));

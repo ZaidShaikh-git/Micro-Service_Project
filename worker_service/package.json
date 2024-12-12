@@ -16,7 +16,9 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^8.5.1",
     "bcrypt": "^5.0.1",
-    "pg": "^8.6.0"
+    "pg": "^8.6.0",
+    "axios": "^1.4.0",
+    "cors": "^2.8.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.4"

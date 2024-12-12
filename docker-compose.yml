@@ -1,32 +1,86 @@
-# version: '3'
+version: '3'
 services:
+  servicecatolog_service:
+    build: ./serviceCatalog_service
+    container_name: serviceCatalog_container
+    depends_on:
+      - postgres
+    ports:
+      - "3004:3004"
+    volumes:
+      - C:/Users/ZAID/Desktop/Project/microservices-app/serviceCatalog_service:/app
+      - /app/node_modules
+    environment:
+      - DATABASE_URL_SERVICE=postgres://postgres:root@user_db:5432/servicedb-docker
+
+
   user_service:
     build: ./user_service
+    container_name: user_container
+    depends_on:
+      - postgres
     ports:
       - "3001:3001"
+    volumes:
+      - C:/Users/ZAID/Desktop/Project/microservices-app/user_service:/app
+      - /app/node_modules
     environment:
-      - DATABASE_URL=postgres://user:password@db:5432/usersdb
+      - DATABASE_URL_user=postgres://postgres:root@user_db:5432/userdb-docker
 
   booking_service:
     build: ./booking_service
+    container_name: booking_container
     ports:
       - "3002:3002"
+    volumes:
+      - C:/Users/ZAID/Desktop/Project/microservices-app/booking_service:/app
+      - /app/node_modules
     environment:
-      - DATABASE_URL=postgres://user:password@db:5432/bookingsdb
+      - DATABASE_URL_booking=postgres://postgres:root@user_db:5432/bookingdb-docker
+      - USER_SERVICE_URL=http://user_service:3001/userService
+      - WORKER_SERVICE_URL=http://worker_container:3003/workers
+      - SERVICE_CATALOG_URL=http://worker_container:3004/service
+
 
   worker_service:
     build: ./worker_service
+    container_name: worker_container
     ports:
       - "3003:3003"
+    volumes:
+      - C:/Users/ZAID/Desktop/Project/microservices-app/worker_service:/app
+      - /app/node_modules
     environment:
-      - DATABASE_URL=postgres://user:password@db:5432/workersdb
+      - DATABASE_URL_worker=postgres://postgres:root@user_db:5432/workerdb-docker
+      - USER_SERVICE_URL=http://user_service:3001/userService
 
-  # PostgreSQL Database Service for all services
-  db:
-    image: postgres:13
+# PostgreSQL Database Service for all services
+  postgres:
+    image: postgres
+    container_name: user_db
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: usersdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: userdb-docker
     ports:
       - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+      
+volumes:
+  pgdata:
+  pgadmin_data:

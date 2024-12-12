@@ -1,7 +1,6 @@
 {
-  "name": "booking_service",
+  "name": "user_service",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,13 +11,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^1.4.0",
     "bcrypt": "^5.0.1",
-    "cors": "^2.8.5",
+    "dbconfig": "^1.1.7",
     "express": "^4.19.2",
     "jsonwebtoken": "^8.5.1",
-    "nodemailer": "^6.9.16",
-    "pg": "^8.6.0"
+    "pg": "^8.6.0",
+    "axios": "^1.4.0",
+    "cors": "^2.8.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.4"

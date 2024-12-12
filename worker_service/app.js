@@ -1,32 +1,26 @@
-// Worker Management Service: app.js
 const express = require('express');
-const { Pool } = require('pg');
+const cors = require('cors'); // Import CORS
+const workerRoutes = require('./routes/workerRoutes');
 
 const app = express();
-app.use(express.json());
+app.use(express.json()); // Middleware to parse JSON bodies
 
-app.get("/" ,(req,res) => {
-  res.send("<h1>This is worker service Container runnuing</h1>")
-})
+// Enable CORS for all routes
+app.use(cors({
+  origin: 'http://localhost:5173', // Replace with your frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
+  credentials: true // If you need to allow credentials (cookies, authorization headers)
+}));
 
-// PostgreSQL setup
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+// Use the worker routes
+app.use('/workers', workerRoutes);
 
-// Register a worker
-app.post('/workers', async (req, res) => {
-  const { userId, qualifications } = req.body;
-  const result = await pool.query(
-    'INSERT INTO workers (user_id, qualifications) VALUES ($1, $2) RETURNING *',
-    [userId, qualifications]
-  );
-  res.json(result.rows[0]);
+// Default route to confirm the service is running
+app.get("/", (req, res) => {
+  res.send("<h1>This is worker service container running</h1>");
 });
 
-// Fetch all workers
-app.get('/workers', async (req, res) => {
-  const result = await pool.query('SELECT * FROM workers');
-  res.json(result.rows);
+const port = process.env.PORT || 3003;
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
-
-// Start server
-app.listen(3003, () => console.log('Worker management service running on port 3003'));
